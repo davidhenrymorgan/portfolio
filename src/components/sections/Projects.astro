@@ -1,0 +1,22 @@
+---
+import ProjectsFilter from '@/components/islands/ProjectsFilter';
+
+// TODO: This will be replaced with content collections later
+---
+
+<section id="projects" class="py-20 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Featured Projects
+      </h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        {/* TODO: Update with your project section description */}
+        A selection of my recent work spanning web development, mobile apps, and design projects. 
+        Each project showcases different aspects of my technical skills and problem-solving abilities.
+      </p>
+    </div>
+    
+    <ProjectsFilter client:visible />
+  </div>
+</section>
