@@ -5,8 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: Replace 'username' with your actual GitHub username
-  site: 'https://username.github.io',
+  site: 'https://davidhenrymorgan.github.io',
   base: '/portfolio',
   output: 'static',
   
