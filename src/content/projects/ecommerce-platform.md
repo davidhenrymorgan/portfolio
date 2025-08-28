@@ -31,7 +31,19 @@ This e-commerce platform is a comprehensive solution designed to handle high-tra
 
 ## Technical Highlights
 
-<!-- TODO: Add actual technical details -->
+- **Architecture**: Split into `web` (React), `api` (Express), and `worker` (BullMQ) packages in a pnpm monorepo with shared TypeScript types
+- **API**: Express + TypeScript with `zod` request/response validation, `pino` structured logging, request IDs, and `express-rate-limit` + IP blocking for abuse protection
+- **Persistence**: PostgreSQL via Prisma ORM, Prisma Migrate for schema changes, composite indexes on SKU/category/price, row-level locking (`FOR UPDATE SKIP LOCKED`) for inventory decrements
+- **Caching**: Redis cache-aside for product lists/details and price blocks (tiered TTL 300–900s), Redis pub/sub to invalidate keys on product changes, hot keys protected with request coalescing
+- **Jobs/Queue**: BullMQ (Redis) for async tasks: email receipts, Stripe webhook retries, search indexing, thumbnail generation; exponential backoff + dead-letter queues
+- **Search**: Elasticsearch for full-text + faceted filtering; incremental indexing from DB via outbox table processed by workers
+- **Payments**: Stripe Payment Intents with SCA; webhooks verified by signature, idempotency ensured via Redis locks + Stripe idempotency keys; orders transition through a state machine
+- **Auth**: JWT access tokens + rotating refresh tokens stored as httpOnly cookies; device-scoped refresh token families; Argon2id password hashing; optional TOTP MFA
+- **Cart**: Guest cart stored in signed, tamper-proof cookies; on login, carts are merged server-side by SKU with quantity reconciliation and stock checks
+- **Assets**: S3-compatible object storage for product media; presigned uploads; Sharp-based pipeline for resizing and AVIF/WebP generation; CloudFront CDN with cache-busting
+- **Observability**: OpenTelemetry traces across api/worker, Prometheus metrics and Grafana dashboards, Sentry for error tracking; structured logs with correlation IDs
+- **CI/CD**: GitHub Actions, Docker multi-stage builds, deploy to AWS ECS Fargate; RDS for PostgreSQL and ElastiCache for Redis; zero-downtime rolling updates + automatic migrations
+- **Performance**: Code-splitting and route-level lazy loading, image preloading, HTTP/2, long-lived CDN caching for immutable assets; N+1 queries prevented via Prisma `include` and batched loaders
 - **Frontend**: React with TypeScript, Redux Toolkit for state management
 - **Backend**: Node.js with Express, RESTful API design
 - **Database**: PostgreSQL for relational data, Redis for caching
